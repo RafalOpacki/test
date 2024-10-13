@@ -2,7 +2,6 @@
   <v-app>
     <v-container>
       <v-form ref="form" @submit.prevent>
-        <!-- RuleGroup Component -->
         <rule-group
           :options="options"
           :isFirstRuleGroup="true"
@@ -49,7 +48,7 @@ import RuleGroup from "./RuleGroup.vue";
 export default {
   name: "RuleBuilder",
   props: {
-    options: { type: Object, required: true }, // Accept 'options' as a prop
+    options: { type: Object, required: true },
   },
   components: {
     RuleGroup,
@@ -84,12 +83,10 @@ export default {
       if (valid) {
         try {
           const formData = this.$refs.ruleGroup.getData();
-
-          // Call the registered callback (this.send from Node-RED)
-          if (this.sendCallback) {
-            this.sendCallback(formData); // Pass form data to Node-RED
+          // Check if sendCallback is set and call it
+          if (this.exposed && this.exposed.sendCallback) {
+            this.exposed.sendCallback(formData); // Call the passed callback
           }
-
           this.resetRules();
           this.formSubmissionSucceeded = true;
         } catch (error) {
@@ -99,6 +96,5 @@ export default {
       }
     },
   },
-  expose: ["sendCallback"], // Expose sendCallback for external registration
 };
 </script>

@@ -23,6 +23,7 @@ createWebComponent({
   registerCallback(element, instance) {
     // Provide a method to set a custom callback like 'this.send' from Node-RED
     element.setCallback = function (callback) {
+      instance.exposed = instance.exposed || {}; // Ensure exposed exists
       instance.exposed.sendCallback = callback; // Expose the callback in the Vue instance
     };
   },
