@@ -15,25 +15,31 @@
             color="error"
             @click.prevent="resetRules"
             variant="outlined"
-            >Reset Rules</v-btn
           >
+            Reset Rules
+          </v-btn>
           <v-btn
             size="small"
             color="success"
             @click.prevent="submitFilter"
             variant="outlined"
             type="submit"
-            >Submit Rules</v-btn
           >
+            Submit Rules
+          </v-btn>
         </div>
       </v-form>
     </v-container>
-    <v-snackbar v-model="formSubmissionSucceeded" color="success" timeout="2500"
-      >Form submission succeeded</v-snackbar
+    <v-snackbar
+      v-model="formSubmissionSucceeded"
+      color="success"
+      timeout="2500"
     >
-    <v-snackbar v-model="formSubmissionFailed" color="error" timeout="2500"
-      >Form submission failed</v-snackbar
-    >
+      Form submission succeeded
+    </v-snackbar>
+    <v-snackbar v-model="formSubmissionFailed" color="error" timeout="2500">
+      Form submission failed
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -43,14 +49,26 @@ import RuleGroup from "./RuleGroup.vue";
 export default {
   name: "RuleBuilder",
   props: {
-    options: { type: Object, required: true },
-    submitCallback: { type: Function, required: true },
+    options: { type: Object, required: true }, // Accept 'options' as a prop
   },
   components: {
     RuleGroup,
   },
   data() {
     return {
+      options: {
+        types: [
+          { label: "Type 1", value: "type-1" },
+          { label: "Type 2", value: "type-2" },
+          { label: "Type 3", value: "type-3" },
+        ],
+        conditions: [
+          { label: "More", value: ">" },
+          { label: "Equal", value: "=" },
+          { label: "Less", value: "<" },
+          { label: "Is In", value: "isin" },
+        ],
+      },
       formSubmissionSucceeded: false,
       formSubmissionFailed: false,
     };
@@ -66,7 +84,12 @@ export default {
       if (valid) {
         try {
           const formData = this.$refs.ruleGroup.getData();
-          this.submitCallback(formData);
+
+          // Call the registered callback (this.send from Node-RED)
+          if (this.sendCallback) {
+            this.sendCallback(formData); // Pass form data to Node-RED
+          }
+
           this.resetRules();
           this.formSubmissionSucceeded = true;
         } catch (error) {
@@ -76,5 +99,6 @@ export default {
       }
     },
   },
+  expose: ["sendCallback"], // Expose sendCallback for external registration
 };
 </script>
