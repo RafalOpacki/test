@@ -41,6 +41,11 @@
 import RuleGroup from "./RuleGroup.vue";
 
 export default {
+  name: "RuleBuilder",
+  props: {
+    options: { type: Object, required: true },
+    submitCallback: { type: Function, required: true },
+  },
   components: {
     RuleGroup,
   },
@@ -48,19 +53,6 @@ export default {
     return {
       formSubmissionSucceeded: false,
       formSubmissionFailed: false,
-      options: {
-        types: [
-          { label: "Type 1", value: "type-1" },
-          { label: "Type 2", value: "type-2" },
-          { label: "Type 3", value: "type-3" },
-        ],
-        conditions: [
-          { label: "More", value: ">" },
-          { label: "Equal", value: "=" },
-          { label: "Less", value: "<" },
-          { label: "Is In", value: "isin" },
-        ],
-      },
     };
   },
   methods: {
@@ -74,8 +66,7 @@ export default {
       if (valid) {
         try {
           const formData = this.$refs.ruleGroup.getData();
-          // send data to node-red
-          this.send(formData);
+          this.submitCallback(formData);
           this.resetRules();
           this.formSubmissionSucceeded = true;
         } catch (error) {

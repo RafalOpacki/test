@@ -1,20 +1,6 @@
-/**
- * main.ts
- *
- * Bootstraps Vuetify and other plugins then mounts the App`
- */
+import { defineCustomElement } from "vue";
+import RuleBuilder from "./RuleBuilder.vue";
 
-// Plugins
-import { registerPlugins } from "@/plugins";
+const RuleBuilderElement = defineCustomElement(RuleBuilder);
 
-// Components
-import App from "./App.vue";
-
-// Composables
-import { createApp } from "vue";
-
-const app = createApp(App);
-
-registerPlugins(app);
-
-app.mount("#rulegroup");
+customElements.define("rule-builder", RuleBuilderElement);

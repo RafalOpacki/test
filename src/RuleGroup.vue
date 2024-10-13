@@ -68,7 +68,6 @@
 
 <script>
 import Condition from "./Condition.vue";
-// import RuleGroup from "./RuleGroup.vue";
 
 export default {
   components: { Condition },
